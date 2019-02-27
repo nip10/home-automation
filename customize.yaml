@@ -1,0 +1,24 @@
+sensor.bedroom_humidity:
+  friendly_name: Humidity
+sensor.bedroom_temperature:
+  friendly_name: Temperature
+sensor.living_room_humidity:
+  friendly_name: Humidity
+sensor.living_room_temperature:
+  friendly_name: Temperature
+sensor.office_humidity:
+  friendly_name: Humidity
+sensor.office_temperature:
+  friendly_name: Temperature
+switch.hall_light:
+  friendly_name: Lamp
+switch.office_ps4:
+  friendly_name: PS4
+switch.office_tv:
+  friendly_name: TV
+switch.office_monitors:
+  friendly_name: PC Monitors
+binary_sensor.hall_movement:
+  friendly_name: Movement
+light.rgb_light_strip_1:
+  friendly_name: PC RGB

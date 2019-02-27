@@ -1,0 +1,16 @@
+- id: auto_hall_light
+  alias: Auto Hall Light
+  trigger:
+  - platform: state
+    entity_id: binary_sensor.hall_movement
+    to: 'on'
+  - platform: state
+    entity_id: binary_sensor.hall_movement
+    to: 'off'
+    for:
+      #minutes: 2
+      seconds: 10
+  action:
+    service_template: >
+      switch.turn_{{ trigger.to_state.state}}
+    entity_id: switch.hall_light

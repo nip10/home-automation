@@ -1,0 +1,231 @@
+homeassistant:
+  # Name of the location where Home Assistant is running
+  name: Home
+  # Location required to calculate the time the sun rises and sets
+  latitude: !secret lat
+  longitude: !secret lng
+  # Impacts weather/sunrise data (altitude above sea level in meters)
+  elevation: !secret elevation
+  # metric for Metric, imperial for Imperial
+  unit_system: metric
+  # Pick yours from here: http://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+  time_zone: Europe/Lisbon
+  # Customization file
+  customize: !include customize.yaml
+
+# Enables the frontend
+frontend:
+  themes: !include themes.yaml
+
+# Enables configuration UI
+config:
+
+# Uncomment this if you are using SSL/TLS, running in Docker container, etc.
+http:
+  base_url: !secret ha_url
+  ssl_certificate: /ssl/fullchain.pem
+  ssl_key: /ssl/privkey.pem
+
+# Checks for available updates
+# Note: This component will send some information about your system to
+# the developers to assist with development of Home Assistant.
+# For more information, please see:
+# https://home-assistant.io/blog/2016/10/25/explaining-the-updater/
+updater:
+  # Optional, allows Home Assistant developers to focus on popular components.
+  # include_used_components: true
+
+# Discover some devices automatically
+discovery:
+
+# Allows you to issue voice commands from the frontend in enabled browsers
+conversation:
+
+# Enables support for tracking state changes over time
+history:
+
+# View all events in a logbook
+logbook:
+
+# Weather
+weather:
+  - platform: ipma
+
+# Text to speech
+tts:
+  - platform: google
+
+# Cloud
+cloud:
+
+media_player:
+  - platform: spotify
+    client_id: !secret spotify_client_id
+    client_secret: !secret spotify_client_secret
+  - platform: plex
+    entity_namespace: plex
+    include_non_clients: true
+    use_episode_art: true
+
+api:
+
+alexa:
+  smart_home:
+
+lovelace:
+  mode: yaml
+
+switch:
+  - platform: mqtt
+    name: "Office TV"
+    state_topic: "office/tv"
+    command_topic: "office/tv"
+    payload_on: "ON"
+    payload_off: "OFF"
+    optimistic: false
+    qos: 0
+    retain: false
+  - platform: mqtt
+    name: "Office PS4"
+    state_topic: "office/ps4"
+    command_topic: "office/ps4"
+    payload_on: "ON"
+    payload_off: "OFF"
+    optimistic: false
+    qos: 0
+    retain: false
+  - platform: mqtt
+    name: "Hall Light"
+    state_topic: "hall/stat/sonoff/POWER"
+    command_topic: "hall/cmnd/sonoff/POWER"
+    availability_topic: "hall/tele/sonoff/LWT"
+    payload_available: "Online"
+    payload_not_available: "Offline"
+    qos: 0
+    payload_on: "ON"
+    payload_off: "OFF"
+    retain: false
+  - platform: mqtt
+    name: "Office Monitors"
+    state_topic: "office/stat/pcmon/POWER"
+    command_topic: "office/cmnd/pcmon/POWER"
+    availability_topic: "office/tele/pcmon/LWT"
+    payload_available: "Online"
+    payload_not_available: "Offline"
+    qos: 0
+    payload_on: "ON"
+    payload_off: "OFF"
+    retain: false
+    
+sensor:
+  - platform: mqtt
+    name: "Office Temperature"
+    state_topic: "office/weather"
+    unit_of_measurement: '°C'
+    value_template: "{{ value_json.temperature }}"
+  - platform: mqtt
+    name: "Office Humidity"
+    state_topic: "office/weather"
+    unit_of_measurement: '%'
+    value_template: "{{ value_json.humidity }}"
+  - platform: mqtt
+    name: "Living Room Temperature"
+    state_topic: "livingroom/weather/tele/SENSOR"
+    unit_of_measurement: '°C'
+    value_template: "{{ value_json.AM2301.Temperature }}"
+  - platform: mqtt
+    name: "Living Room Humidity"
+    state_topic: "livingroom/weather/tele/SENSOR"
+    unit_of_measurement: '%'
+    value_template: "{{ value_json.AM2301.Humidity }}"
+  - platform: mqtt
+    name: "Bedroom Temperature"
+    state_topic: "bedroom/weather/tele/SENSOR"
+    unit_of_measurement: '°C'
+    value_template: "{{ value_json.AM2301.Temperature }}"
+  - platform: mqtt
+    name: "Bedroom Humidity"
+    state_topic: "bedroom/weather/tele/SENSOR"
+    unit_of_measurement: '%'
+    value_template: "{{ value_json.AM2301.Humidity }}"
+  - platform: plex
+  - platform: command_line
+    name: CPU Temperature
+    command: "cat /sys/class/thermal/thermal_zone1/temp"
+    # If errors occur, remove degree symbol below
+    unit_of_measurement: "°C"
+    value_template: '{{ value | multiply(0.001) | round(1) }}'
+ 
+binary_sensor:
+  - platform: mqtt
+    name: "Hall Movement"
+    state_topic: "hall/cmnd/pir/POWER1"
+    device_class: motion
+
+light:
+  - platform: mqtt
+    schema: json
+    name: "PC LED Strip"
+    state_topic: "office/pc_led"
+    command_topic: "office/pc_led/set"
+    availability_topic: "office/pc_led/LWT"
+    white_value: true
+    effect: true
+    effect_list:
+      - solid
+      - Music - L2R
+      - Music - Middle
+      - Music - LR2M
+      - Music - Fma965
+      - bpm
+      - candy cane
+      - confetti
+      - cyclon rainbow
+      - dots
+      - fire
+      - glitter
+      - juggle
+      - lightning
+      - noise
+      - police all
+      - police one
+      - rainbow
+      - rainbow with glitter
+      - ripple
+      - sinelon
+      - twinkle
+      - sinelon
+      - sine hue
+      - full hue
+      - breathe
+      - hue breathe
+      - Christmas
+      - christmas alternate
+      - random stars
+      - St Patty
+      - Valentine
+      - Turkey Day
+      - Thanksgiving
+      - USA
+      - Independence
+      - Halloween
+      - Go Lions
+      - Hail
+      - Touchdown
+      - Punkin
+      - Lovey Day
+      - Holly Jolly
+    brightness: true
+    rgb: true
+    optimistic: false
+    qos: 0
+
+vacuum:
+  - platform: roomba
+    host: !secret roomba_ip
+    username: !secret roomba_username
+    password: !secret roomba_pw
+
+group: !include groups.yaml
+automation: !include automations.yaml
+script: !include scripts.yaml

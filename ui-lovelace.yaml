@@ -1,0 +1,80 @@
+title: SDC HA
+
+resources:
+  - url: /local/mini-media-player-bundle.js?v=1.0.0
+    type: module
+
+# Exclude entities from "Unused entities" view
+excluded_entities:
+  - weblink.router
+
+views:
+    # Title of the view. Will be used as the tooltip for tab icon
+  - title: Overview
+    theme: midnight
+    cards:
+        - type: entities
+          title: Sala
+          show_header_toggle: false
+          entities:
+            - sensor.living_room_temperature
+            - sensor.living_room_humidity
+            - vacuum.roomba
+        - type: entities
+          title: Quarto
+          show_header_toggle: false
+          entities:
+            - sensor.bedroom_temperature
+            - sensor.bedroom_humidity
+        - type: entities
+          title: Hall
+          show_header_toggle: false
+          entities:
+            - binary_sensor.hall_movement
+            - switch.hall_light
+            - automation.auto_hall_light
+        - type: entities
+          title: Office
+          show_header_toggle: false
+          entities:
+            - sensor.office_temperature
+            - sensor.office_humidity
+            - switch.office_tv
+            - switch.office_ps4
+            - switch.office_monitors
+            - light.pc_led_strip
+        - type: vertical-stack
+          cards:
+            - type: custom:mini-media-player
+              entity: media_player.plex_officetv
+            - type: custom:mini-media-player
+              entity: media_player.samsung_tv_remote
+            - type: custom:mini-media-player
+              entity: media_player.kodi_dc_w840su_series_local
+            - type: custom:mini-media-player
+              entity: media_player.plex_unnamed_device
+            - type: custom:mini-media-player
+              entity: media_player.spotify
+    # Title of the view. Will be used as the tooltip for tab icon
+  - title: Office
+    theme: midnight
+    cards:
+        - type: entities
+          title: Office
+          show_header_toggle: false
+          entities:
+          - sensor.office_temperature
+          - sensor.office_humidity
+          - switch.office_tv
+          - switch.office_ps4
+          - switch.office_monitors
+          - light.pc_led_strip
+   # Title of the view. Will be used as the tooltip for tab icon
+  - title: Server
+    theme: midnight
+    cards:
+        - type: entities
+          title: Status
+          show_header_toggle: false
+          entities:
+          - sensor.cpu_temperature
